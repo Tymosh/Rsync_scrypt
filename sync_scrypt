@@ -1,0 +1,35 @@
+#!/bin/bash
+
+# set SOURCE_DIR as a location where you are  running the script
+SOURCE_DIR=`pwd`
+
+# set DESTINATION_DIR according to passed argument
+DESTINATION_DIR="/cygdrive/$1/tymoshen/Projects"
+
+# toggler which decides when to start to add path elements to DESTINATION_DIR
+IS_PROJECTS_WORD_FOUND="NO"
+#split the path to current dir with '/'
+IN=$SOURCE_DIR
+ADDR=(${IN//// })
+
+# loop where DESTINATION_DIR will be build
+# WARNING: it will not work with the PATH with two ropsitories "Projects" in it
+for i in "${ADDR[@]}"; do
+
+	# toogler is switched => add the path element
+	if [[ $IS_PROJECTS_WORD_FOUND == "YES" ]]; then
+		DESTINATION_DIR=$DESTINATION_DIR"/$i"
+	fi
+	
+  # find key word 'Projects'
+	if [ "$i" == "Projects" ]; then
+		# switch the toogler to start add path's elements to it
+		IS_PROJECTS_WORD_FOUND="YES"		
+	fi
+done
+
+#echo "Destination:	"$DESTINATION_DIR
+#echo "Source:		"$SOURCE_DIR
+
+#rsync --prune-empty-dirs --archive --recursive --links --devices --specials --chmod=u=rwX --progress --delete  --exclude-from=/usr/local/etc/exclude.file $SOURCE_DIR $DESTINATION_DIR
+rsync -iavzI --progress --whole-file --omit-dir-times --chmod=ugo=rwX --exclude-from=/usr/local/etc/exclude.file $SOURCE_DIR $DESTINATION_DIR
