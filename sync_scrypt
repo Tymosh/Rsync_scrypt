@@ -21,7 +21,7 @@ for i in "${ADDR[@]}"; do
 		DESTINATION_DIR=$DESTINATION_DIR"/$i"
 	fi
 	
-  # find key word 'Projects'
+        # find key word 'Projects'
 	if [ "$i" == "Projects" ]; then
 		# switch the toogler to start add path's elements to it
 		IS_PROJECTS_WORD_FOUND="YES"		
